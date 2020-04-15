@@ -13,11 +13,12 @@ public class Cluster {
 
 	 Sample clusterPoint;
 	 ArrayList<Sample> list; 
+	 int id;
 	 
-	 public Cluster() {
-		 double[] initial = new double [2]; //The length of the array values depends on the data set and can be modified.
-		 this.clusterPoint = new Sample(initial);
+	 public Cluster() {		 
+		 this.clusterPoint = null;
 		 this.list = new ArrayList<Sample>();
+		 this.id = -1;
 	 }
 	 
 	 public void addSample(Sample point) {
@@ -37,6 +38,13 @@ public class Cluster {
 		 int randomNumber = rand.nextInt(list.size());
 		 return list.get(randomNumber);
 	 }
-}
 	 
+	 public void PrintCluster() {
+		 //System.out.println("The Cluster Point: "+ clusterPoint.toString());
+		 System.out.println("The Points: ");
+		 for(Sample p: list) {
+			 System.out.println(p.toString());
+		 }
+	 }
+}	 
 

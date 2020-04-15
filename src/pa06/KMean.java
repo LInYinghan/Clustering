@@ -14,9 +14,19 @@ public class KMean {
     Cluster originalData;
 	
 	public KMean(int k){
-		clusters = new Cluster[k]; 
-		originalData = new Cluster();
+		this.clusters = new Cluster[k]; 
+		this.originalData = new Cluster(); 
 	}
+	
+	public void setClusterPoint(int k) {
+		for(int i=0; i<k; i++) {
+			do{
+				clusters[i].setCluster(originalData.PickCluster(originalData.list));
+		    }while()
+		    	
+		}
+	}
+
 			
 	public static void main(String[]args) throws FileNotFoundException{
 		Scanner input = new Scanner(System.in);
@@ -28,6 +38,7 @@ public class KMean {
 		
 		KMean kmean = new KMean(k);
 		ReadFile(filename, kmean);
+		kmean.originalData.PrintCluster();
 	}
 	
 	public static void ReadFile(String filename, KMean kmean) throws FileNotFoundException {
@@ -45,12 +56,21 @@ public class KMean {
 	public static double[] process(String line){
 		Scanner data = new Scanner(line);
         double[]values = new double[2];  //The length of the array values depends on the data set and can be modified.
-		for(int i =0; i<values.length; i++) {
-			while(data.hasNext()){
-				values[i] = data.nextDouble();
-			}
-		}	
+		int counter=0;
+		while(data.hasNextDouble()){
+			values[counter] = data.nextDouble();
+			counter++;
+		}
+			
 		data.close();
 		return values; 
+	}
+	
+	public static double Distance(Sample s1, Sample s2) {
+		double sum = 0;
+		for(int i=0; i<s1.size(); i++) {
+			sum = sum + Math.pow((s1.get(i)-s2.get(i)),2);   
+		}
+		return Math.sqrt(sum); 
 	}
 }
