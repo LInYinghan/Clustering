@@ -13,12 +13,10 @@ public class Cluster {
 
 	 Sample clusterPoint;
 	 ArrayList<Sample> list; 
-	 int id;
 	 
 	 public Cluster() {		 
 		 this.clusterPoint = null;
 		 this.list = new ArrayList<Sample>();
-		 this.id = -1;
 	 }
 	 
 	 public void addSample(Sample point) {
@@ -30,7 +28,7 @@ public class Cluster {
 	 }
 	 
 	 public void setCluster(Sample point) {
-		 clusterPoint = point;
+		 this.clusterPoint = point;
 	 }
 	 
 	 public Sample PickCluster(ArrayList<Sample> list){

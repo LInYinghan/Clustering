@@ -25,11 +25,15 @@ public class Sample {
 		for(double d: Sample) {
 			s = s+d+" ";
 		}
-		return "[ "+s+"]";
+		return "ClusterId: "+ClusterId+"[ "+s+"]";
 	}
 	
 	public double get(int i) {
 		return Sample.get(i);
+	}
+	
+	public void setClusterId(int i) {
+		this.ClusterId = i;
 	}
 	
 	public int size() {

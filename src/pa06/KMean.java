@@ -10,7 +10,7 @@ import java.io.FileNotFoundException;
  *
  */
 public class KMean {
-	Cluster[]clusters;
+	Cluster[] clusters;
     Cluster originalData;
 	
 	public KMean(int k){
@@ -19,14 +19,17 @@ public class KMean {
 	}
 	
 	public void setClusterPoint(int k) {
+		this.clusters = new Cluster[k];
+		
 		for(int i=0; i<k; i++) {
-			do{
-				clusters[i].setCluster(originalData.PickCluster(originalData.list));
-		    }while()
-		    	
+			clusters[i] = new Cluster();
+			clusters[i].addSample(originalData.PickCluster(this.originalData.list));		
 		}
 	}
-
+	
+    public void Reclassify(){
+		
+	}
 			
 	public static void main(String[]args) throws FileNotFoundException{
 		Scanner input = new Scanner(System.in);
@@ -38,19 +41,26 @@ public class KMean {
 		
 		KMean kmean = new KMean(k);
 		ReadFile(filename, kmean);
+		kmean.setClusterPoint(k);
+		for(int i=0; i<k; i++) {
+			kmean.clusters[i].PrintCluster();
+		}
 		kmean.originalData.PrintCluster();
 	}
 	
 	public static void ReadFile(String filename, KMean kmean) throws FileNotFoundException {
 		File textfile = new File(filename);
 		Scanner sc = new Scanner(textfile);
+		int i = 0;
 		while(sc.hasNextLine()) {
 	        String line = sc.nextLine();
-			Sample point = new Sample(process(line)); 
+			Sample point = new Sample(process(line));
+			point.setClusterId(i);
 			kmean.originalData.addSample(point);
+			i++; 
 		}
         sc.close();
-        
+       
 	}
 		
 	public static double[] process(String line){
@@ -60,8 +70,7 @@ public class KMean {
 		while(data.hasNextDouble()){
 			values[counter] = data.nextDouble();
 			counter++;
-		}
-			
+		}			
 		data.close();
 		return values; 
 	}
@@ -73,4 +82,16 @@ public class KMean {
 		}
 		return Math.sqrt(sum); 
 	}
+	
+    /*8public static int Closest() {
+		
+	}
+	
+	public static double FindAverage() {
+		
+	}
+	*/
+	
+
+	
 }
