@@ -14,8 +14,9 @@ public class Cluster {
 	 Sample clusterPoint;
 	 ArrayList<Sample> list; 
 	 
-	 public Cluster() {		 
-		 this.clusterPoint = null;
+	 public Cluster() {
+		 double[] values = {0.0, 0.0};
+		 this.clusterPoint = new Sample(values);
 		 this.list = new ArrayList<Sample>();
 	 }
 	 
@@ -38,8 +39,9 @@ public class Cluster {
 	 }
 	 
 	 public void PrintCluster() {
-		 //System.out.println("The Cluster Point: "+ clusterPoint.toString());
-		 System.out.println("The Points: ");
+		 System.out.println("The Cluster Point: ");
+		 System.out.println(clusterPoint.toString());
+		 System.out.println("The Points list: ");
 		 for(Sample p: list) {
 			 System.out.println(p.toString());
 		 }

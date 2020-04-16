@@ -19,16 +19,13 @@ public class KMean {
 	}
 	
 	public void setClusterPoint(int k) {
-		this.clusters = new Cluster[k];
-		
+		this.clusters = new Cluster[k];	
 		for(int i=0; i<k; i++) {
 			clusters[i] = new Cluster();
-			clusters[i].addSample(originalData.PickCluster(this.originalData.list));		
+			clusters[i].setCluster(originalData.PickCluster(this.originalData.list));
+            
+			clusters[i].list = new ArrayList<Sample>();
 		}
-	}
-	
-    public void Reclassify(){
-		
 	}
 			
 	public static void main(String[]args) throws FileNotFoundException{
@@ -41,11 +38,12 @@ public class KMean {
 		
 		KMean kmean = new KMean(k);
 		ReadFile(filename, kmean);
+		kmean.originalData.PrintCluster();		
 		kmean.setClusterPoint(k);
-		for(int i=0; i<k; i++) {
+		Reclassify(kmean.originalData.list, kmean.clusters);
+		for(int i=0; i<k; i++){
 			kmean.clusters[i].PrintCluster();
 		}
-		kmean.originalData.PrintCluster();
 	}
 	
 	public static void ReadFile(String filename, KMean kmean) throws FileNotFoundException {
@@ -83,15 +81,31 @@ public class KMean {
 		return Math.sqrt(sum); 
 	}
 	
-    /*8public static int Closest() {
-		
+    public static int Closest(Sample point, Cluster[]clusters) {
+		double min = Distance(point, clusters[0].clusterPoint);
+		int count = 0;
+		for(int j=0; j<clusters.length;j++) {
+			double d = Distance(point, clusters[j].clusterPoint);
+			if(d<=min) {
+				min = d;
+				
+				count = j;
+			}
+		}
+		return count;
 	}
+    
+    public static void Reclassify(ArrayList<Sample> list, Cluster[]clusters) {
+    	for(int i=0; i<list.size(); i++) {
+    		int count = Closest(list.get(i), clusters);
+    		list.get(i).setClusterId(clusters[count].clusterPoint.ClusterId);
+    		clusters[count].addSample(list.get(i));
+    	}
+    }
 	
-	public static double FindAverage() {
-		
-	}
-	*/
-	
-
+	//public static double[] FindAverage(Cluster cluster) {
+		//double[]average;
+		//return average; 
+	//}
 	
 }
