@@ -11,7 +11,8 @@ import java.util.*;
 public class Sample {
 	ArrayList<Double> Sample;
 	int ClusterId;
-	
+	/**constructor to construct a sample of vector
+	*/
 	public Sample(double[] values) {
 		this.Sample = new ArrayList<Double>();
 		for(int i=0; i<values.length; i++) {
@@ -19,7 +20,8 @@ public class Sample {
 		}
 		this.ClusterId = -1;
 	}
-	
+	/**print out the sample vector
+	*/
 	public String toString(){ 
 		String s = "";
 		for(double d: Sample) {
@@ -31,7 +33,8 @@ public class Sample {
 	public double get(int i) {
 		return Sample.get(i);
 	}
-	
+	/**cluster id categories
+	*/
 	public void setClusterId(int i) {
 		this.ClusterId = i;
 	}
