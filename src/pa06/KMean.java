@@ -4,9 +4,10 @@ import java.util.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 
+
 /**
  * The class with the main method...
- * @author Yinghan Lin
+ * @author Yinghan Lin, Shiyi(Wendy) Mao
  *
  */
 public class KMean{
@@ -19,12 +20,26 @@ public class KMean{
 	}
 
 	public void setClusterPoint(int k) {
+		if(k > originalData.getList().size()){
+			throw new RuntimeException("K should not be larger than number of samples");
+		}
+		if(k <= 0){
+			throw new RuntimeException("K should not be 0");
+		}
 		this.clusters = new Cluster[k];
-		for(int i=0; i<k; i++) {
+		Set<Sample> randomSampleSet = new HashSet<>();
+		Random random = new Random();
+		while(randomSampleSet.size() != k){
+			int randomInt = random.nextInt(originalData.getList().size());
+			randomSampleSet.add(originalData.getList().get(randomInt));
+		}
+		Iterator<Sample> iterator = randomSampleSet.iterator();
+		for(int i = 0; i < k; i++){
 			clusters[i] = new Cluster();
-			clusters[i].setCluster(originalData.PickCluster(this.originalData.list));
-
-			clusters[i].list = new ArrayList<Sample>();
+			Sample representSample = iterator.next();
+			clusters[i].setCluster(representSample);
+			clusters[i].addSample(representSample);
+			representSample.setClusterId(i);
 		}
 	}
 
@@ -37,13 +52,31 @@ public class KMean{
 		input.close();
 
 		KMean kmean = new KMean(k);
+
 		ReadFile(filename,kmean);//in test
+		System.out.println();
+
 		kmean.originalData.PrintCluster();
+		System.out.println();
 		kmean.setClusterPoint(k);
-		Reclassify(kmean.originalData.list, kmean.clusters);
-		for(int i=0; i<k; i++){
-			kmean.clusters[i].PrintCluster();
+		for(int i = 0; i < 100; i++){
+			for(Cluster cluster : kmean.clusters){
+				Sample avgSample = new Sample(FindAverage(cluster));
+				avgSample.setClusterId(cluster.clusterPoint.ClusterId);
+				cluster.setCluster(avgSample);
+				cluster.list = new ArrayList<>();
+			}
+			Reclassify(kmean.originalData.getList(), kmean.clusters);
+
+			// print intermediate results
+			System.out.println((i + 1) + " time iteration: ");
+			for(Cluster cluster : kmean.clusters){
+				cluster.PrintCluster();
+				System.out.println();
+			}
 		}
+
+
 	}
 
 	public static void ReadFile(String filename, KMean kmean) throws FileNotFoundException {
@@ -121,4 +154,3 @@ public class KMean{
 	}
 
 }//end of the class
-
