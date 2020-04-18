@@ -30,12 +30,14 @@ public class KMean{
 			throw new RuntimeException("K should not be 0");
 		}
 
+		// build the clusters
 		this.clusters = new Cluster[k];
 
 		// a set of sample to store the random sample point
 		Set<Sample> randomSampleSet = new HashSet<>();
 		Random random = new Random();
 
+		// select k different sample points from origin data
 		while(randomSampleSet.size() != k){
 			int randomInt = random.nextInt(originalData.getList().size());
 			randomSampleSet.add(originalData.getList().get(randomInt));
@@ -57,6 +59,8 @@ public class KMean{
 
 	// the entrance method which do 100 times iteration to cluster sample points
 	public static void main(String[]args) throws FileNotFoundException{
+
+		// read file name from the input
 		Scanner input = new Scanner(System.in);
 		System.out.println("Please enter the name of the file: ");
 		String filename = input.nextLine();
@@ -76,6 +80,7 @@ public class KMean{
 		kmean.originalData.PrintCluster();
 		System.out.println();
 
+		// initialize k clusters with the sample points
 		kmean.setClusterPoint(k);
 
 		// loop 100 times to stabilize the clustering
@@ -86,13 +91,17 @@ public class KMean{
 				Sample avgSample = new Sample(FindAverage(cluster));
 				avgSample.setClusterId(cluster.clusterPoint.ClusterId);
 				cluster.setCluster(avgSample);
+
+				// clear the data points of the cluster for reclassifying
 				cluster.list = new ArrayList<>();
 			}
+			// reclassify all data points to the clusters
 			Reclassify(kmean.originalData.getList(), kmean.clusters);
 
-		
+			// print intermediate results
 			System.out.println((i + 1) + " time iteration: ");
-			for(Cluster cluster : kmean.clusters){			
+			for(Cluster cluster : kmean.clusters){
+				// print the cluster and the data points in it
 				cluster.PrintCluster();
 				System.out.println();
 			}
@@ -116,7 +125,7 @@ public class KMean{
 
 	public static double[] process(String line){
 		Scanner data = new Scanner(line);
-        double[]values = new double[2];  
+        double[]values = new double[2];  //The length of the array values depends on the data set and can be modified.
 		int counter=0;
 		while(data.hasNextDouble()){
 			values[counter] = data.nextDouble();
@@ -174,3 +183,4 @@ public class KMean{
 	}
 
 }//end of the class
+
