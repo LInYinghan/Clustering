@@ -7,7 +7,7 @@ import java.io.FileNotFoundException;
 
 /**
  * The class with the main method...
- * @author Yinghan Lin, Shiyi(Wendy) Mao
+ * @author Yinghan Lin, Shiyi (Wendy) Mao
  *
  */
 public class KMean{
@@ -19,47 +19,69 @@ public class KMean{
 		this.originalData = new Cluster();
 	}
 
+	// initialize the cluster with the origin data point by randomly selecting
+	// k different data point from origin data set
 	public void setClusterPoint(int k) {
+		// check for illegal parameter
 		if(k > originalData.getList().size()){
 			throw new RuntimeException("K should not be larger than number of samples");
 		}
 		if(k <= 0){
 			throw new RuntimeException("K should not be 0");
 		}
+
 		this.clusters = new Cluster[k];
+
+		// a set of sample to store the random sample point
 		Set<Sample> randomSampleSet = new HashSet<>();
 		Random random = new Random();
+
 		while(randomSampleSet.size() != k){
 			int randomInt = random.nextInt(originalData.getList().size());
 			randomSampleSet.add(originalData.getList().get(randomInt));
 		}
+
+		// assign the k sample point to k clusters accordingly
 		Iterator<Sample> iterator = randomSampleSet.iterator();
 		for(int i = 0; i < k; i++){
 			clusters[i] = new Cluster();
 			Sample representSample = iterator.next();
+			// set cluster point to the randomly picked sample point
 			clusters[i].setCluster(representSample);
+			// add the randomly picked sample point to the cluster
 			clusters[i].addSample(representSample);
+			// set the sample point to the cluster it belongs to
 			representSample.setClusterId(i);
 		}
 	}
 
+	// the entrance method which do 100 times iteration to cluster sample points
 	public static void main(String[]args) throws FileNotFoundException{
 		Scanner input = new Scanner(System.in);
 		System.out.println("Please enter the name of the file: ");
 		String filename = input.nextLine();
+
+		// read the cluster number k from input
 		System.out.println("Please enter the number of clusters: ");
 		int k = input.nextInt();
 		input.close();
 
+		// initialize the kmean instance
 		KMean kmean = new KMean(k);
 
+		// read sample data point from the file and store them in origin data
 		ReadFile(filename,kmean);//in test
 		System.out.println();
 
 		kmean.originalData.PrintCluster();
 		System.out.println();
+
 		kmean.setClusterPoint(k);
+
+		// loop 100 times to stabilize the clustering
 		for(int i = 0; i < 100; i++){
+
+			// replace the cluster point with the average of all data point in the cluster
 			for(Cluster cluster : kmean.clusters){
 				Sample avgSample = new Sample(FindAverage(cluster));
 				avgSample.setClusterId(cluster.clusterPoint.ClusterId);
@@ -68,15 +90,13 @@ public class KMean{
 			}
 			Reclassify(kmean.originalData.getList(), kmean.clusters);
 
-			// print intermediate results
+		
 			System.out.println((i + 1) + " time iteration: ");
-			for(Cluster cluster : kmean.clusters){
+			for(Cluster cluster : kmean.clusters){			
 				cluster.PrintCluster();
 				System.out.println();
 			}
 		}
-
-
 	}
 
 	public static void ReadFile(String filename, KMean kmean) throws FileNotFoundException {
@@ -96,7 +116,7 @@ public class KMean{
 
 	public static double[] process(String line){
 		Scanner data = new Scanner(line);
-        double[]values = new double[2];  //The length of the array values depends on the data set and can be modified.
+        double[]values = new double[2];  
 		int counter=0;
 		while(data.hasNextDouble()){
 			values[counter] = data.nextDouble();
@@ -140,13 +160,13 @@ public class KMean{
 	public static double[] FindAverage(Cluster c) {
 		double sumX=0;
 		double sumY=0;
-		ArrayList<Sample> temp = c.getList();//getting the list of points in a cluster
+		ArrayList<Sample> temp = c.getList();
 		int numOfPoints = temp.size();
 		for(int i=0;i<numOfPoints;i++){
 			Sample s = temp.get(i);
 			sumX+=s.get(0);
 			sumY+=s.get(1);
-		}//getting the sum of all x coordinates and y coordinates
+		}
 		double[] toReturn = new double[2];
 		toReturn[0] = sumX/numOfPoints;
 		toReturn[1] = sumY/numOfPoints;
