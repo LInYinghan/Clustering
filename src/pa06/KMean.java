@@ -107,7 +107,8 @@ public class KMean{
 			}
 		}
 	}
-
+	/**read in a file and store data in cluster
+	*/
 	public static void ReadFile(String filename, KMean kmean) throws FileNotFoundException {
 		File textfile = new File(filename);
 		Scanner sc = new Scanner(textfile);
@@ -134,7 +135,8 @@ public class KMean{
 		data.close();
 		return values;
 	}
-
+	/**find the distance between 2 cluster points
+	*/
 	public static double Distance(Sample s1, Sample s2) {
 		double sum = 0;
 		for(int i=0; i<s1.size(); i++) {
@@ -142,8 +144,9 @@ public class KMean{
 		}
 		return Math.sqrt(sum);
 	}
-
-    public static int Closest(Sample point, Cluster[]clusters) {
+	/**find the closest point to a given sample
+	*/
+    	public static int Closest(Sample point, Cluster[]clusters) {
 		double min = Distance(point, clusters[0].clusterPoint);
 		int count = 0;
 		for(int j=0; j<clusters.length;j++) {
@@ -157,13 +160,13 @@ public class KMean{
 		return count;
 	}
 
-    public static void Reclassify(ArrayList<Sample> list, Cluster[]clusters) {
-    	for(int i=0; i<list.size(); i++) {
-    		int count = Closest(list.get(i), clusters);
-    		list.get(i).setClusterId(clusters[count].clusterPoint.ClusterId);
-    		clusters[count].addSample(list.get(i));
-    	}
-    }
+    	public static void Reclassify(ArrayList<Sample> list, Cluster[]clusters) {
+		for(int i=0; i<list.size(); i++) {
+			int count = Closest(list.get(i), clusters);
+			list.get(i).setClusterId(clusters[count].clusterPoint.ClusterId);
+			clusters[count].addSample(list.get(i));
+		}
+	    }
 
 
 	public static double[] FindAverage(Cluster c) {
